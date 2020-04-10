@@ -1,1 +1,1 @@
-docker-compose run composer "$@"
+docker-compose run composer composer "$@"
