@@ -3,7 +3,7 @@ version: '3'
 networks:
   laravel:
 
-volumes: 
+volumes:
   mysql_data: { driver: local }
 
 services:
@@ -13,12 +13,13 @@ services:
       dockerfile: container-build/web/Dockerfile
     container_name: web
     environment:
-      MYSQL_DATABASE: yolo
-      MYSQL_USER: potato
-      MYSQL_PASSWORD: secretswag420noscope
-      MYSQL_ROOT_PASSWORD: secretswag420noscopeblazeit
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_DATABASE: yolo
+      DB_USERNAME: potato
+      DB_PASSWORD: secretswag420noscope
     volumes:
-      - .src/:/var/www
+      - ./src:/var/www
     ports:
       - "80:80"
     networks:
@@ -39,8 +40,25 @@ services:
       MYSQL_ROOT_PASSWORD: secretswag420noscopeblazeit
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
-    volumes: 
+    volumes:
       - "mysql_data:/var/lib/mysql"
       - ./src/data/schema.sql:/docker-entrypoint-initdb.d/schema.sql
     networks:
       - laravel
+  composer:
+    image: composer:latest
+    container_name: composer
+    volumes:
+      - ./src:/var/www/
+    working_dir: /var/www/
+    networks:
+      - laravel
+  npm:
+      image: node:13.7
+      container_name: npm
+      volumes:
+        - ./src:/var/www/
+      working_dir: /var/www
+      entrypoint: ['npm']
+      networks:
+        - laravel
