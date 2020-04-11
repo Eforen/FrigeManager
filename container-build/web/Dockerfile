@@ -13,4 +13,6 @@ RUN echo 'xdebug.remote_enable=on' >> /usr/local/etc/php/conf.d/xdebug.ini \
  && curl -sS https://getcomposer.org/installer \
   | php -- --install-dir=/usr/local/bin --filename=composer \
  && echo "AllowEncodedSlashes On" >> /etc/apache2/apache2.conf
+RUN chown -R www-data:www-data /var/www \
+ && chmod --recursive g+rwX /var/www
 WORKDIR /var/www
