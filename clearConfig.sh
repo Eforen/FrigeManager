@@ -1,0 +1,1 @@
+./artisan.sh config:cache
